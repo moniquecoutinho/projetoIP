@@ -4,17 +4,39 @@ def lerArquivo(fileName="agendasuspeitos.txt"):
     for i in range(len(conteudo)):
         conteudo[i] = conteudo[i].replace("\n","")
     return conteudo
+def listaNomes(chamadas):
+  listaNomes=[]
+  for i in range(len(chamadas)):
+    if chamadas[i].find(":")>=0:
+      ind=i
+      pos = chamadas[i].find(":")
+      nome = chamadas[i][0:pos:1]
+      listaNomes.append(nome)
+  return listaNomes
     
 def imprimeAgenda(nome,agenda):
     tam=len(agenda)
     for i in range(tam):
       if agenda[i].find(nome)>=0:
         ind=i
-        pos=agenda[i].find(nome)
-    print("Agenda do suspeito %s:" %nome)
+        pos=agenda[i].find(nome)    
     agendasus=agenda[ind][(len(nome)+13):]
     agendasus=agendasus.split(",")
     return agendasus
+
+def pegaNum(nome,agenda):
+    tam=len(agenda)
+    for i in range(tam):
+      if agenda[i].find(nome)>=0:
+        ind=i
+        pos=agenda[i].find(nome)
+    if nome == "joao":
+      res=agenda[ind][(len(nome)+1):(len(nome)+12)]
+    elif nome == "pedro":
+      res=agenda[ind][(len(nome)+1):(len(nome)+12)]
+    elif nome == "antonio":
+      res=agenda[ind][(len(nome)+1):(len(nome)+12)]
+    return res
 
 while True:
   #MENU
@@ -37,12 +59,46 @@ while True:
     print()
     #chamando a função imprimeAgenda
     agendasus=imprimeAgenda(nome,agenda)
+    print("Agenda do suspeito %s:" %nome)  
     for e in agendasus:
       print(e)
     print()
   elif op == "2":
-    #chamar função agenda com suspeitos
-    print("2- Listar agenda apenas com suspeito incluídos")
+    listaNomes = listaNomes(chamadas)
+    for nome in listaNomes:
+      if nome == "joao":
+        numPedro = pegaNum("pedro", agenda)
+        numAntonio = pegaNum("antonio", agenda)
+        agendaJoao = imprimeAgenda("joao",agenda)
+        saida = "joao: "
+        for i in range(len(agendaJoao)):
+          if agendaJoao[i].find(numPedro)>=0:
+            saida = saida + "pedro"
+          if agendaJoao[i].find(numAntonio)>=0:
+            saida = saida + ", antonio"
+        print(saida)
+      if nome == "pedro":
+        numJoao = pegaNum("joao", agenda)
+        numAntonio = pegaNum("antonio", agenda)
+        agendaPedro = imprimeAgenda("pedro", agenda)
+        saida = "pedro: "
+        for i in range(len(agendaPedro)):
+          if agendaPedro[i].find(numJoao)>=0:
+            saida = saida + "joao"
+          if agendaPedro[i].find(numAntonio)>=0:
+            saida = saida + ", antonio"
+        print(saida)
+      if nome == "antonio":
+        numJoao = pegaNum("joao", agenda)
+        numPedro = pegaNum("pedro", agenda)
+        agendaAntonio = imprimeAgenda("antonio", agenda)
+        saida = "antonio: "
+        for i in range(len(agendaAntonio)):
+          if agendaAntonio[i].find(numJoao)>=0:
+            saida = saida + "joao "
+          if agendaAntonio[i].find(numPedro)>=0:
+            saida = saida + " pedro"
+        print(saida)
     print()
   elif op == "3":
     #chamar função reciproca
